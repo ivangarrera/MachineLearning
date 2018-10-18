@@ -1,8 +1,7 @@
 import pandas as pd
 
-data_set = pd.read_csv('D:\Ing. Informatica\Cuarto\Machine Learning\T2.csv',
+data_set = pd.read_csv('/Users/bersus96/Desktop/T2.csv', 
                        sep=',')
-df = data_set
 # Remove strings columns
 for column in data_set:
     if type(data_set[column][0]) is str:
@@ -17,6 +16,11 @@ for column in data_set:
 data_set = data_set.drop_duplicates()  
 # Remove rows with any null value
 data_set = data_set.dropna()
-      
-data_set.to_csv('D:\Ing. Informatica\Cuarto\Machine Learning\T2_cleaned.csv', 
+
+# Remove version, because 2.3.3 is not a valid float value and PCA could fail
+data_set = data_set.drop('Version', axis=1)
+
+data_set_mean = data_set[[column for column in data_set if column.endswith("MEAN")]]
+
+data_set.to_csv('/Users/bersus96/Desktop/T2_cleaned.csv', 
                 sep=',', index=False)
