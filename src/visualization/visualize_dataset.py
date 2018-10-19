@@ -1,6 +1,7 @@
 from common_clustering import CommonClustering
 
-clustering_features = CommonClustering(r'C:\Users\ivangarrera\Desktop\T2_cleaned.csv')
+#clustering_features = CommonClustering(r'C:\Users\ivangarrera\Desktop\T2_cleaned.csv')
+clustering_features = CommonClustering('D:\Ing. Informatica\Cuarto\Machine Learning\T2_cleaned_accelerometer.csv')
 
 clustering_features.PrincipalComponentAnalysis(num_components=2)
 clustering_features.PlotPCAResult()

@@ -35,8 +35,7 @@ class CommonClustering:
             Negative value indicates that a sample has been asigned to the wrong cluster
             Value near 1 indicates that the object is well matched with its cluster    
         """
-        ideal_number_of_clusters = 1000000
-        
+                
         # Find the number of clusters that gives the best silhouettes coefficient
         for clus in range(2, 50):
             labels = KMeans(n_clusters=clus, init="random", random_state=0).\
@@ -45,7 +44,8 @@ class CommonClustering:
             
             if max(self.silhouettes) == self.silhouettes[len(self.silhouettes) - 1]:
                 ideal_number_of_clusters = clus
-                
+            
+        print (max(self.silhouettes),'- Cluster:', ideal_number_of_clusters)
         return ideal_number_of_clusters
     
     def KMeansWithIdeal(self, number_of_clusters):
@@ -60,7 +60,7 @@ class CommonClustering:
         plt.show()
     
     def PlotSilhouettes(self):
-        plt.plot(self.silhouettes)
+        plt.plot(self.silhouettes, 'bx-')
         plt.show()
         
     
