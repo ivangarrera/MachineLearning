@@ -14,6 +14,7 @@ class CommonClustering:
         self.data_set = pd.read_csv(data_path, sep=',')
         self.reduced_data = None
         self.silhouettes = []
+        self.attr = ''
     
     def PrincipalComponentAnalysis(self, num_components, plot_graph=True):
         scaler = preprocessing.MinMaxScaler()
@@ -23,6 +24,7 @@ class CommonClustering:
         
         if plot_graph:
             plt.scatter(self.reduced_data[:,0], self.reduced_data[:,1])
+            plt.savefig(r'../../reports/figures/PCA_{}.png'.format(self.attr))
             plt.show()
         
 
@@ -54,7 +56,9 @@ class CommonClustering:
             # Plotting centroids
             plt.scatter(k_means.cluster_centers_[:,0], k_means.cluster_centers_[:,1],
                         c='red', s=50)
+            plt.savefig(r'../../reports/figures/KMeans_{}.png'.format(self.attr))
             plt.show()
+        return labels
     
     def AgglomerativeClusteringWithNearestNeighbors(self, plot_graph=True, nneighbors=3, nclusters=5):
         # Clustering (Agglomerative Clustering)
@@ -72,6 +76,7 @@ class CommonClustering:
         
         if plot_graph:
             plt.scatter(self.reduced_data[:,0], self.reduced_data[:,1], c=labels)
+            plt.savefig(r'../../reports/figures/AgglomerativeClustering_{}.png'.format(self.attr))
             plt.show()
     
     def DBSCANClustering(self, plot_graph=True, eps=0.1, min_samples=5):
@@ -86,10 +91,13 @@ class CommonClustering:
                                         
         if plot_graph:
             plt.scatter(self.reduced_data[:,0], self.reduced_data[:,1], c=labels)
+            plt.savefig(r'../../reports/figures/DBSCAN_{}.png'.format(self.attr))
             plt.show()
+        return labels
     
     def PlotSilhouettes(self):
         plt.plot(self.silhouettes, 'bx-')
+        plt.savefig(r'../../reports/figures/Silhouettes_{}.png'.format(self.attr))
         plt.show()
         
     

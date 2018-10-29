@@ -11,10 +11,10 @@ class BasicCleaning:
         # Convert string to datetime
         data_set['TimeStemp'] = pd.to_datetime(data_set['TimeStemp'])
         
-        #filter data by date
-        data_set = data_set[(data_set['TimeStemp'] > '2016-04-28 00:00:00') & \
-                            (data_set['TimeStemp'] <= '2016-04-30 23:59:59')]
-        
+        # filter data by date
+        data_set = data_set[(data_set['TimeStemp'] > '2016-04-30 00:00:00') & \
+                            (data_set['TimeStemp'] <= '2016-05-01 23:59:59')]
+
         # Remove strings columns
         for column in data_set:
             if type(data_set[column][0]) is str:
