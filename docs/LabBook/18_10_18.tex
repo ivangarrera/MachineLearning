@@ -1,8 +1,11 @@
 \section{Thursday, 18 October 2018}
 
-We get the columns that ends with "MEAN" because that represents the median values. In that way the dataset is more representative. After that we work on the visualization.\\
-We do an attemt and the PCA fails because we haven't the version column and there are rows where the version number is not a float, it's a string like "x.x.x", so we eliminate the version column.\\
-The covariance is so low, that indicate data are not representative.\\
-Next, we start clustering with k-means. We analice different groups in order to interpret the plots. We part the job: Ivan analice the magnetic field, Benjamin the gyroscope and Dídimo the accelerometer.\\
-If we do k-means with the complete dataset, the computer are out of memory, that is the reason why we only considerate the values of only 5 days.\\
-We do k-means in a range of 2 to 20 clusters to know what the ideal number of that. In order to get it we use the silhouette method and we analice which is the best coefficient. When we already know the ideal number of cluster we do the plot showing the different groups. 
+\subsection{Steps}
+\begin{itemize}
+\item We get the columns that ends with ''MEAN`` because that represents the median values. In that way the dataset is more representative. After that we work on the visualization.
+\item We do an attemt and the PCA fails because we haven't the version column and there are rows where the version number is not a float, it's a string like ''x.x.x``, so we eliminate the version column.
+The covariance is so low, that indicate data are not representative.
+\item Next, we start clustering with k-means. We analice different groups in order to interpret the plots. We part the job: Ivan analice the magnetic field, Benjamin the gyroscope and Dídimo the accelerometer.
+\item If we do k-means with the complete dataset, the computer are out of memory, that is the reason why we only considerate the values of only 5 days.
+\item We do k-means in a range of 2 to 20 clusters to know what the ideal number of that. In order to get it we use the silhouette method and we analice which is the best coefficient. When we already know the ideal number of cluster we do the plot showing the different groups. 
+\end{itemize}

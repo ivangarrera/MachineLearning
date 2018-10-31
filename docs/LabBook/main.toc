@@ -1,0 +1,11 @@
+\babel@toc {spanish}{}
+\contentsline {section}{\numberline {1}Monday, 15 October 2018}{3}{section.1}
+\contentsline {subsection}{\numberline {1.1}Steps}{3}{subsection.1.1}
+\contentsline {section}{\numberline {2}Thursday, 18 October 2018}{3}{section.2}
+\contentsline {subsection}{\numberline {2.1}Steps}{3}{subsection.2.1}
+\contentsline {section}{\numberline {3}Friday, 19 October 2018}{3}{section.3}
+\contentsline {subsection}{\numberline {3.1}Steps}{3}{subsection.3.1}
+\contentsline {section}{\numberline {4}Tuesday, 23 October 2018}{4}{section.4}
+\contentsline {subsection}{\numberline {4.1}Steps}{4}{subsection.4.1}
+\contentsline {section}{\numberline {5}Monday, 29 October 2018}{4}{section.5}
+\contentsline {subsection}{\numberline {5.1}Steps}{4}{subsection.5.1}
