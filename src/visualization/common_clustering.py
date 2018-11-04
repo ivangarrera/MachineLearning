@@ -20,7 +20,9 @@ class CommonClustering:
         scaler = preprocessing.MinMaxScaler()
         data_norm = scaler.fit_transform(self.data_set)
         
-        self.reduced_data = PCA(n_components=num_components).fit_transform(data_norm)
+        estimator = PCA(n_components=num_components)
+        self.reduced_data = estimator.fit_transform(data_norm)
+        print(estimator.explained_variance_ratio_)
         
         if plot_graph:
             plt.scatter(self.reduced_data[:,0], self.reduced_data[:,1])

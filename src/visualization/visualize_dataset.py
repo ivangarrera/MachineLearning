@@ -1,7 +1,7 @@
 from common_clustering import CommonClustering
 
-clustering_features = CommonClustering(r'C:\Users\ivangarrera\Desktop\T2_cleaned.csv')
-#clustering_features = CommonClustering('D:\Ing. Informatica\Cuarto\Machine Learning\T2_cleaned_magneticField.csv')
+#■clustering_features = CommonClustering(r'C:\Users\ivangarrera\Desktop\T2_cleaned.csv')
+clustering_features = CommonClustering('D:\Ing. Informatica\Cuarto\Machine Learning\T2_cleaned_gyroscope.csv')
 
 attr = list(clustering_features.data_set)[0][:list(clustering_features.data_set)[0].find('_')]
 clustering_features.attr = attr
@@ -30,6 +30,7 @@ ax = Axes3D(fig)
 ax.scatter(data_set_labels_mean.values[:,0], 
            data_set_labels_mean.values[:,1], 
            data_set_labels_mean.values[:,2])
+plt.savefig(r'../../reports/figures/centroids3D_{}.png'.format(attr))
 plt.show()
 
 # Agglomerative clustering algorithm using nearest neighbors matrix
