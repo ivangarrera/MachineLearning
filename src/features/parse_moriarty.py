@@ -1,8 +1,8 @@
 from data_parsing_moriarty import ParsingMoriarty
 from supervisedLearning import SupervisedLearning
 
-path_to_data = r'C:\Users\ivangarrera\Desktop\T4.csv'
-path_to_moriarty = r'C:\Users\Ivangarrera\Downloads\Moriarty.csv'
+path_to_data = r'C:\Users\bersus\Desktop\T4.csv'
+path_to_moriarty = r'C:\Users\bersus\Desktop\Moriarty.csv'
 
 parsing_moriarty = ParsingMoriarty(path_to_data, path_to_moriarty)
 

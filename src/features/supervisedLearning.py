@@ -21,7 +21,7 @@ class SupervisedLearning:
         scaler = preprocessing.MinMaxScaler().fit(self.merged)
         self.X_scaled = scaler.transform(self.merged)
         
-        self.X_train, self.X_test, self.Y_train, self.Y_test = \
+        self.X_Train, self.X_Test, self.Y_Train, self.Y_Test = \
         train_test_split(self.X_scaled, self.target, test_size=0.4)
     
     def NaiveBayesAlgorithm(self):
