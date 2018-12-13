@@ -1,0 +1,6 @@
+\section{Monday, 26 November 2018}
+
+\subsection{Steps}
+We choose the T4 dataset because we think are more relevant respect T1, T2 and T3. We tried to merge Moriarty and T4 dataset but we had a problem since the \textit{UUID} didn't match because it's a value in milliseconds and it's very difficult to be exactly the same.
+We did the merge manually. We are going through the\textit{ moriarty dataset} and if the UUID is in an interval of 5000 we put the same UUID since we consider that it is in the same moment of time. Finally, with \textit{pandas} we made the merge with the uuid key.
+
