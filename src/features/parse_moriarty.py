@@ -1,5 +1,4 @@
 from data_parsing_moriarty import ParsingMoriarty
-import pandas as pd
 from supervisedLearning import SupervisedLearning
 
 path_to_data = r'C:\Users\Ivangarrera\Desktop\T4.csv'
@@ -10,26 +9,17 @@ parsing_moriarty = ParsingMoriarty(path_to_data, path_to_moriarty)
 characteristics = ["UUID", "Total_CPU", "TotalMemory_used_size", "Traffic_TotalRxBytes", 
                    "Traffic_TotalTxBytes", "Traffic_TotalWifiRxBytes", "Traffic_TotalWifiTxBytes", 
                    "procs_running", "connectedWifi_SSID"]
+
+# Merge Sherlock and Moriarty datasets, using the UUID column. We consider that
+# an attack 'a' (in the tx instant) has ocurred in the instant t1 if and only 
+# if, t1 <= tx <= t1 + 5000
 parsing_moriarty.MergeDataByUUID(characteristics)
-x = parsing_moriarty.data_set
-cuantosceros = 300
-mydataset = pd.DataFrame(data=None, columns=parsing_moriarty.data_set.columns)
 
-# Meter al dataset los no-virus
-for i in range(300):
-    index = int(i * len(parsing_moriarty.data_set) / cuantosceros)
-    frames = [mydataset, parsing_moriarty.data_set.iloc[[index]]]
-    mydataset = pd.concat(frames)
+# Create the dataset we are going to use to train and test the models
+supervised_dataset = parsing_moriarty.CreateSupervisedDataset(number_of_non_attacks=300)
+parsing_moriarty.merged = supervised_dataset.sort_values(["UUID"])
 
-# Meter al dataset los viruses
-for i in range(len(parsing_moriarty.data_set)):
-    if parsing_moriarty.data_set["SessionType"][i] == 1:
-        frames = [mydataset, parsing_moriarty.data_set.iloc[[i]]]
-        mydataset = pd.concat(frames)
-
-parsing_moriarty.merged = mydataset.sort_values(["UUID"])
-
-# Remove action and details columns
+# Remove action and details columns, because these columns aren't numeric
 characteristics = ["Total_CPU", "TotalMemory_used_size", "Traffic_TotalRxBytes", 
                    "Traffic_TotalTxBytes", "Traffic_TotalWifiRxBytes",
                    "Traffic_TotalWifiTxBytes", "procs_running"] 
