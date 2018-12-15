@@ -1,0 +1,37 @@
+\section{Monday, 10 December 2018}
+
+\subsection{Steps}
+\begin{itemize}
+	\item We needed to add a column whose indicates when the attacks occur. For it, we made a query with \textit{pandas} and it return the values between the indicated interval. If the Moriarty timestamp is near to the Sherlock, we add 1 value to the column added about attacks in Sherlock.
+	\begin{lstlisting}
+def MergeDataByUUID(self, characteristics):
+	self.data_set = self.data_set.loc[:, self.data_set.columns.str.contains('|'.join(characteristics))]
+	
+	for index in range(len(self.data_set_moriarty["UUID"])):
+		self.merged = self.data_set.query("UUID <= " + str(self.data_set_moriarty["UUID"][index]) +" <= UUID + 5000")
+		if not self.merged.empty:
+			self.data_set_moriarty["UUID"][index] = self.merged["UUID"].values[0]
+	
+	self.merged = pd.merge(self.data_set, self.data_set_moriarty, on="UUID")
+	\end{lstlisting}
+	\item We had 150.000 rows in T4 dataset so we need to reduce that. For that, we thought that approximately 300 values were enough, so we chose 300 random rows. We tried that the values were distributed throughout the dataset and not only on the beginning, the end or all together. Later, we added all rows with Moriarty attacks because they are much less than the total rows of dataset and It was very improbable we haven't caught them with that random algorithm. Finally, we sorted the reduce dataset by timestamp.
+	\begin{lstlisting}
+def CreateSupervisedDataset(self, number_of_non_attacks):
+	mydataset = pd.DataFrame(data=None, columns=self.data_set.columns)
+
+	# Select non-attacks and include them into the dataset
+	for i in range(300):
+		index = int(i * len(self.data_set) / number_of_non_attacks)
+		frames = [mydataset, self.data_set.iloc[[index]]]
+		mydataset = pd.concat(frames)
+
+	# Select attacks and include them into the dataset
+	for i in range(len(self.data_set)):
+		if self.data_set["SessionType"][i] == 1:
+			frames = [mydataset, self.data_set.iloc[[i]]]
+			mydataset = pd.concat(frames)
+	return mydataset
+\end{lstlisting}
+	
+\end{itemize}
+
