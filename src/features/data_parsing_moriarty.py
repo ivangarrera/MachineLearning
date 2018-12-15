@@ -10,24 +10,37 @@ class ParsingMoriarty:
     
     def MergeDataByUUID(self, characteristics):
         self.data_set = self.data_set.loc[:, self.data_set.columns.str.contains('|'.join(characteristics))]
-        
+        self.data_set["SessionType"] = 0
+
         for index in range(len(self.data_set_moriarty["UUID"])):
+            # Find when the attack occurred and include the attack in the dataset
             self.merged = self.data_set.query("UUID <= " + \
                                      str(self.data_set_moriarty["UUID"][index]) +\
                                      " <= UUID + 5000")
             if not self.merged.empty:
                 self.data_set_moriarty["UUID"][index] = self.merged["UUID"].values[0]
-        
-        self.merged = pd.merge(self.data_set, self.data_set_moriarty, on="UUID")
-    
+                
+                # Get the index of the corresponding attack inside the dataset 
+                # and set its attack column to a true value
+                index = self.data_set["UUID"].values.tolist().index(self.merged["UUID"].values[0])
+                self.data_set["SessionType"][index] = 1
+                    
     def MergedWithNumericColumns(self, characteristics):
         self.merged_numeric = self.merged[characteristics]
     
-    def GetTargets(self):
-        target = []
-        for i in range(len(self.merged["ActionType"])):
-            if "malicious" in self.merged["ActionType"][i]:
-                target.append(1)
-            else:
-                target.append(0)
-        return target
+    def CreateSupervisedDataset(self, number_of_non_attacks):
+        mydataset = pd.DataFrame(data=None, columns=self.data_set.columns)
+
+        # Select non-attacks and include them into the dataset
+        for i in range(300):
+            index = int(i * len(self.data_set) / number_of_non_attacks)
+            frames = [mydataset, self.data_set.iloc[[index]]]
+            mydataset = pd.concat(frames)
+        
+        # Select attacks and include them into the dataset
+        for i in range(len(self.data_set)):
+            if self.data_set["SessionType"][i] == 1:
+                frames = [mydataset, self.data_set.iloc[[i]]]
+                mydataset = pd.concat(frames)
+        return mydataset
+    

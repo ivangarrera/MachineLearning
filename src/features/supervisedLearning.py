@@ -1,11 +1,11 @@
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
-from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import hamming_loss
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import neighbors
-from sklearn.cross_validation import cross_val_score
+from sklearn.ensemble import RandomForestClassifier
 
 class SupervisedLearning:
     def __init__(self, merged, target):
@@ -21,6 +21,7 @@ class SupervisedLearning:
         scaler = preprocessing.MinMaxScaler().fit(self.merged)
         self.X_scaled = scaler.transform(self.merged)
         
+        # 60% is training data and 40% is testing data
         self.X_Train, self.X_Test, self.Y_Train, self.Y_Test = \
         train_test_split(self.X_scaled, self.target, test_size=0.4)
     
@@ -28,46 +29,48 @@ class SupervisedLearning:
         model = GaussianNB()
         model.fit(self.X_Train, self.Y_Train)
         
-        predicion = model.predict(self.X_Test)
-        mae = mean_absolute_error(self.Y_Test, predicion)
-        print("Error measure {}".format(mae))
+        prediction = model.predict(self.X_Test)
+        zol = hamming_loss(self.Y_Test, prediction)
+        print("Error measure {}".format(zol))
         
-        xx = np.stack(i for i in range(len(self.Y_Test)))
-        plt.scatter(xx, self.Y_Test, c='r', label='data')
-        plt.plot(xx, predicion, c='g', label='prediction')
-        plt.axis('tight')
-        plt.legend()
-        plt.title("Gaussian NaiveBayes")
-        plt.savefig(r'../../reports/figures/NaiveBayesPrediction.png')
-        plt.show()
+        self.PlotResults("NaiveBayes", prediction)
         
     def KNearestNeighborsAlgorithm(self):
-        xx = np.stack(i for i in range(len(self.target)))
-        for i, weights in enumerate(['uniform', 'distance']):
-            total_scores = []
-            for n_neighbors in range(1,30):
-                knn = neighbors.KNeighborsRegressor(n_neighbors, weights=weights)
-                knn.fit(self.X_scaled, self.target)
-                scores = -cross_val_score(knn, self.X_scaled, self.target,
-                                          scoring="neg_mean_absolute_error", cv=10)
-                total_scores.append(scores.mean())
-            
-            plt.plot(range(0, len(total_scores)), total_scores, marker='x', label=weights)
-            plt.ylabel('cv_score')
-        plt.legend()
-        plt.show()
-        return xx
+        min_zol = 99999999
+        best_neighbors = 0
+        for n_neighbors in range(1,30):
+            knn = neighbors.KNeighborsClassifier(n_neighbors)
+            knn.fit(self.X_Train, self.Y_Train)
+            prediction = knn.predict(self.X_Test)
+            zol = hamming_loss(self.Y_Test, prediction)
+            if zol.item() < min_zol:
+                min_zol = zol
+                best_neighbors = n_neighbors
+        
+        # Knn with best neighbors
+        knn = neighbors.KNeighborsClassifier(best_neighbors)
+        knn.fit(self.X_Train, self.Y_Train)
+        prediction = knn.predict(self.X_Test)
+        print("Error measure {}".format(min_zol))
+        
+        self.PlotResults("KNearestNeighbors", prediction)
     
-    def MakePrediction(self, xx):
-        n_neighbors = 4
-        for i, weights in enumerate(['uniform', 'distance']):
-            knn = neighbors.KNeighborsRegressor(n_neighbors, weights=weights)
-            y_pred = knn.fit(self.X_scaled, self.target).predict(self.X_scaled)
-            
-            plt.subplot(2, 1, i + 1)
-            plt.plot(xx, self.target, c='k', label='data')
-            plt.plot(xx, y_pred, c='g', label='prediction')
-            plt.axis('tight')
-            plt.legend()
-            plt.title('Prediction')
+    def RandomForestAlgorithm(self):
+        rf = RandomForestClassifier(n_estimators=1000, random_state=42)
+        rf.fit(self.X_Train, self.Y_Train)
+        prediction = rf.predict(self.X_Test)
+        
+        zol = hamming_loss(self.Y_Test, prediction)
+        print("Error measure {}".format(zol))
+        
+        self.PlotResults("RandomForest", prediction)
+    
+    def PlotResults(self, title, prediction):
+        xx = np.stack(i for i in range(len(self.Y_Test)))
+        plt.scatter(xx, self.Y_Test, c='r', label='data')
+        plt.plot(xx, prediction, c='g', label='prediction')
+        plt.axis('tight')
+        plt.legend()
+        plt.title(title)
+        plt.savefig(r'../../reports/figures/{}Prediction.png'.format(title))
         plt.show()
